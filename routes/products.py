@@ -49,3 +49,15 @@ def list_products():
         "price": p.price,
         "seller_id": p.seller_id
     } for p in products]), 200
+
+@products_bp.route("/search")
+def search_products():
+    keyword = request.args.get("keyword", "")
+    results = Product.query.filter(Product.title.ilike(f"%{keyword}%")).all()
+    return jsonify([{
+        "id": p.id,
+        "title": p.title,
+        "description": p.description,
+        "price": p.price,
+        "seller_id": p.seller_id
+    } for p in results])
