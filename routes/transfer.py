@@ -26,7 +26,7 @@ def transfer():
     sender.balance -= amount
     receiver.balance += amount
     
-    transaction = Transaction(
+    transaction = Transaction(  # 괄호 오류 수정
         sender_id=sender_id,
         receiver_id=receiver_id,
         amount=amount

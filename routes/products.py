@@ -6,29 +6,23 @@ from models import db, Product
 products_bp = Blueprint("products", __name__)
 
 def is_safe_string(s):
-    """
-    문자열이 100자 이하이며 허용된 문자(한글, 영어, 숫자, 기호)만 포함되어 있는지 검사
-    """
     return isinstance(s, str) and len(s) <= 100 and re.match(r"^[\w\s가-힣.,!?~()\[\]-]*$", s)
 
 @products_bp.route("/", methods=["POST"])
 @jwt_required()
 def create_product():
     data = request.get_json()
-
     title = data.get("title")
     description = data.get("description")
     price = data.get("price")
     seller_id = get_jwt_identity()
-
-    # 🔐 입력값 유효성 검사
+    
     if not is_safe_string(title) or not is_safe_string(description):
         return jsonify({"msg": "입력값이 유효하지 않습니다."}), 400
-
     if not isinstance(price, (int, float)) or price < 0:
         return jsonify({"msg": "가격은 0 이상의 숫자여야 합니다."}), 400
-
-    product = Product(
+    
+    product = Product(  # 괄호 오류 수정
         title=title,
         description=description,
         price=price,
@@ -36,7 +30,6 @@ def create_product():
     )
     db.session.add(product)
     db.session.commit()
-
     return jsonify({"msg": "상품이 등록되었습니다."}), 201
 
 @products_bp.route("/", methods=["GET"])

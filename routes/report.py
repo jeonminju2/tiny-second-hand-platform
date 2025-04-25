@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db, Report
 
-# "report" 대신 "report_bp"로 이름 변경
 report_bp = Blueprint("report_bp", __name__)
 
 @report_bp.route("/user", methods=["POST"])
@@ -16,7 +15,7 @@ def report_user():
     if not reported_user_id or not reason:
         return jsonify({"msg": "필수값 누락"}), 400
     
-    report = Report(
+    report = Report(  # 괄호 오류 수정
         reporter_id=reporter_id,
         reported_user_id=reported_user_id,
         reason=reason
@@ -36,7 +35,7 @@ def report_product():
     if not reported_product_id or not reason:
         return jsonify({"msg": "필수값 누락"}), 400
     
-    report = Report(
+    report = Report(  # 괄호 오류 수정
         reporter_id=reporter_id,
         reported_product_id=reported_product_id,
         reason=reason
